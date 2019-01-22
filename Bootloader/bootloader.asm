@@ -81,18 +81,18 @@ A20_FAIL:
 
 ;보호모드 진입
 ENTRY:				        
-	cli				
-	lgdt [GDTR]		;GDT 로드
+	cli				;GDT 로드
+	lgdt [GDTR]
 	
-	mov eax, cr0	;CR0.PE(0) 활성화    
+	mov eax, cr0	;CR0.PE(0) 활성화
 	or eax, 1
 	mov cr0, eax
-
-	jmp $+2			;파이프라인 유지를 위한 공백              
+	
+	jmp $+2			;파이프라인 유지를 위한 공백
 	nop
 	nop
 	
-	jmp $
+	jmp dword 0x18:0x10000	
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;GDT 영역;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
