@@ -1,1 +1,1 @@
-.\0dev\qemu\qemu-system-x86_64.exe -L . -m 64 -fda ./Disk.img -M pc
+.\0dev\qemu\qemu-system-x86_64.exe -L . -m 64 -fda ./Disk.img -M pc -gdb tcp::15327

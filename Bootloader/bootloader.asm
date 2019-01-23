@@ -45,7 +45,7 @@ READ:
     mov ch, byte [TRACK]   		         
     mov cl, byte [SECTOR]   	         
     mov dh, byte [HEAD]   		
-    mov dl, 0x80                ;플로피 디스크 (A:)               
+    mov dl, 0x00                ;플로피 디스크 (A:)               
     int 0x13                    
     jc READERROR              	
 

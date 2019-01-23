@@ -11,6 +11,8 @@
 [ORG 0x10000]
 [BITS 32]
 
+section .text
+
 PROTECTED:
 	mov ax, 0x20 ;세그먼트 셀렉터 초기화
 	mov ds, ax
@@ -21,8 +23,8 @@ PROTECTED:
 	
 	mov ebp, 0xFFFE	;스택 초기화
 	mov esp, 0xFFFE
-
-LOADKERNEL:
-	jmp 0x10200
 	
-times 512 - ($-$$) db 0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
+;./Kernel32/init32.c의 코드가 이후 바로 실행됨;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
