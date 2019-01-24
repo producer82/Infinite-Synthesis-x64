@@ -49,7 +49,7 @@ Kernel64.img: ./Kernel64/Kernel64N.img
 	
 ###########################운영체제 이미지 빌드###########################	
 Disk.img: ./Bootloader/bootloader.img ./Bootloader/loadkernel.img ./Kernel32/Kernel32.img ./Kernel64/Kernel64.img
-	cat ./Bootloader/bootloader.img ./Bootloader/loadkernel.img ./Kernel32/Kernel32.img ./Kernel64/Kernel64.img > Disk.img
+	cat ./Bootloader/bootloader.img ./Bootloader/loadkernel.img ./Kernel32/Kernel32.img ./Kernel64/test.img ./Kernel64/Kernel64.img > Disk.img
 	
 clean:
 	rm -rf ./Bootloader/bootloader.img ./Bootloader/loadkernel.img 

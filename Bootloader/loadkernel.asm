@@ -13,6 +13,8 @@
 
 section .text
 
+global PROTECTED
+
 PROTECTED:
 	mov ax, 0x20 ;세그먼트 셀렉터 초기화
 	mov ds, ax
