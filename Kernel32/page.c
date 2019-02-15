@@ -1,55 +1,37 @@
-#include "stdkernel.h"
+/********************************************
+ 			Infinite Synthesis x64			
+ 											
+ 파일 명: page.c			
+ 설명: 페이징에 필요한 테이블을 초기화하고 활성화 함
+ 최초 작성: 2019-01-30 						
+********************************************/
+
 #include "memsys.h"
 
-#define P					0x01
-#define RW 				0x02
-#define PAGE_TABLE_SIZE	0x1000
+void initPaging()
+{
+	// unsigned long long -> 64비트 정수형
+	// unsigned long 사용시 메모리에서 32비트 단위로 처리됨.
+	unsigned long long* PML4Entry;
+	unsigned long long* PDPTEntry;
+	unsigned long long* PDEntry;
 
-void initPage(){
-	PML4 *pml4 = (PML4*)0x100000;
-	PDPT *pdpt = (PDPT*)0x101000;
-	PDP *pdp = (PDP*)0x102000;
-	
-	//페이지 맵 레벨 4 테이블 설정
-	setPageEntry(&(pml4[0]), 0x101000, 0, 0, P | RW);
-	for(int i=1; i<512; i++){
-		setPageEntry(&(pml4[i]), 0, 0, 0, 0);
-	}
-	
-	//페이지 디렉터리 포인터 테이블 설정
-	for(int i=0; i<64; i++){
-		setPageEntry(&(pdpt[i]), (0x102000 + (i * PAGE_TABLE_SIZE)), 0, 0, P | RW);
-	}
-	
-	for(int i=64; i<512; i++){
-		setPageEntry(&(pdpt[i]), 0, 0, 0, 0);
-	}
-	
-	//페이지 디렉터리 설정
-	for(int i=0; i<64; i++){
-		for(int j=0; j<512; j++){
-			setPageEntry(&(pdp[j+(i * 512)]), PAGE_TABLE_SIZE * (j + (i * 512)), (i * (PAGE_TABLE_SIZE >> 20)) >> 12, 0, P | RW);
-		}
-	}
-	
-	__asm__ __volatile__(
-		//CR3.PAE(5) 활성화
-		"mov eax, cr4;"
-		"or eax, 0x20;"
-		"mov cr4, eax;"
-	
-		//PML4 로드
-		"mov eax, 0x100000;"
-		"mov cr3, eax;"
-		
-		//CR0.PG(31) 활성화
-		"mov eax, cr0;"
-		"or eax, 0x80000000;"
-		"mov cr0, eax;"
-	);
-}
+	// PML4 테이블 맵핑
+	PML4Entry = (unsigned long long*)0x100000;
+    PML4Entry[0] = (unsigned long long)0x101000 | PAGE_FLAGS_DEFAULT;
 
-void setPageEntry(PageEntry *entry, unsigned int lowerAddress, unsigned int higherAddress, unsigned char higherFlag, unsigned char lowerFlag){
-	entry->lowerAddressAndAttribute = lowerAddress | lowerFlag;
-	entry->higherAddressAndExd = higherAddress | higherFlag;
+	// 페이지 디렉터리 포인터 테이블 맵핑
+	PDPTEntry = (unsigned long long*)0x101000;
+    for(int i = 0; i < 512; i++) {
+		PDPTEntry[i] = (unsigned long long)0x102000 + (i * 0x1000) | PAGE_FLAGS_DEFAULT;
+    }
+
+	// 페이지 디렉터리 테이블 맵핑
+    PDEntry = ( unsigned long long* ) 0x102000;
+    for(int i = 0; i < 512 * 64; i++)
+    {
+		PDEntry[i] = (unsigned long long)0x200000 * i | PAGE_FLAGS_DEFAULT | PAGE_FLAGS_PS;
+    }
+	
+
 }

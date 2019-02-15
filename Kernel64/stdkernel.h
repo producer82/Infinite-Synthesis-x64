@@ -1,1 +1,0 @@
-void print(char* str, char line, char column, unsigned char color);

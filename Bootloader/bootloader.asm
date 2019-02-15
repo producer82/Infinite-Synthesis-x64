@@ -11,9 +11,11 @@
 
 section .text
 
-jmp 0x07C0:START
+jmp 0x07C0:start16
 
-START:
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;리얼모드 영역;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+start16:
 	mov ax, cs	; DS = CS
 	mov ds, ax
 	xor ax, ax
@@ -24,20 +26,26 @@ START:
 	mov cx, 80*25*2	                     
 
 ;화면 초기화
-CLEAR:		              
+clear:		              
 	mov byte[es:bx], 0x00 
 	inc bx
-	loop CLEAR
+	loop clear
 	
 ;디스크 읽기
-READ_INIT:			
-	mov si, 0x1000	;0x1000:0000에 로드
+read_init:
+	;디스크 초기화
+	mov ah, 0x00
+	mov dl, 0x00
+	int 0x13
+			
+	;불러올 주소를 설정
+	mov si, 0x1000z	
 	mov es, si
 	mov bx, 0x0000	
 	
-READ:               			
+readDisk:               			
 	cmp word [TOTALSECTOR], 0	;if (TOTALSECTOR == 0)       
-	je A20_ENABLE				;	jmp A20_ENABLE
+	je a20BiosEnable			;	a20BiosEnable();
 	dec word [TOTALSECTOR]		       
 	
     mov ah, 0x02                ;바이오스 인터럽트 설정
@@ -47,40 +55,40 @@ READ:
     mov dh, byte [HEAD]   		
     mov dl, 0x00                ;플로피 디스크 (A:)               
     int 0x13                    
-    jc READERROR              	
+    jc readError              	
 
     add si, 0x0020      		;1 섹터 = 0x0020 (세그먼트 기준 주소)       
     mov es, si          		
 	
 	inc byte [SECTOR]			
 	cmp byte [SECTOR], 19		;if(SECOTR != 19)
-	jl READ						;	jmp READ             
+	jl readDisk						;	jmp READ             
 								          
 	xor byte [HEAD], 1			                
 	mov byte [SECTOR], 1		          
     
 	cmp byte [HEAD], 1			;if(HEAD == 1)             
-	je READ   					;	jmp READ
+	je readDisk   					;	jmp READ
 								         
 	inc byte [TRACK]			
-	jmp READ                	                       
+	jmp readDisk                	                       
 	
-READERROR:			;읽기 실패시 더 이상 진행하지 않게 무한루프                        
+readError:			;읽기 실패시 더 이상 진행하지 않게 무한루프                        
 	jmp $                
-		 
+		
 ;A20 GATE 활성화
-A20_ENABLE:			    
+a20BiosEnable:			    
 	mov ax, 0x2401
 	int 0x15
-	jnc ENTRY
+	jnc entryToProtected
 
 ;바이오스 인터럽트 미 지원시 컨트롤 포트 사용
-A20_FAIL:			            
+a20PortEnable:			            
 	mov al, 0x02	
 	out 0x92, al
-
+	
 ;보호모드 진입
-ENTRY:				        
+entryToProtected:				        
 	cli				;GDT 로드
 	lgdt [GDTR]
 	
@@ -92,7 +100,7 @@ ENTRY:
 	nop
 	nop
 	
-	jmp dword 0x18:0x10000	
+	jmp dword 0x08:0x10000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;GDT 영역;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
@@ -108,20 +116,6 @@ GDT:
 		db 0
 		db 0
 		db 0	
-	IA_32e_CODE:	;Kernel Code Descriptor
-		dw 0xffff	
-		dw 0x0000	
-		db 0x00		
-		db 0x9A		
-		db 0xAF
-		db 0x00 
-	IA_32e_DATA:	;Kernel Data Descriptor
-		dw 0xffff
-		dw 0x0000
-		db 0x00
-		db 0x92
-		db 0xAF
-		db 0x00
 	IA_32_CODE:	;Kernel Code Descriptor
 		dw 0xffff	
 		dw 0x0000	
@@ -135,6 +129,20 @@ GDT:
 		db 0x00
 		db 0x92
 		db 0xCF
+		db 0x00
+	IA_32e_CODE:	;Kernel Code Descriptor
+		dw 0xffff	
+		dw 0x0000	
+		db 0x00		
+		db 0x9A		
+		db 0xAF
+		db 0x00 
+	IA_32e_DATA:	;Kernel Data Descriptor
+		dw 0xffff
+		dw 0x0000
+		db 0x00
+		db 0x92
+		db 0xAF
 		db 0x00
 	VIDEO:	;Video Segment Descriptor
 		dw 0xffff
@@ -158,8 +166,3 @@ times 510 - ($ - $$) db 0x00
 ;부트로더 시그니쳐
 db 0x55
 db 0xAA 
-	
-
-	
-
-	

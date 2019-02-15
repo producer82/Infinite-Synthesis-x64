@@ -1,24 +1,35 @@
 /********************************************
-			Infinite Synthesis x64			
-			
-파일 명: init32.c
-설명: 32비트 커널 메인
-최초 작성: 2019-01-23
+ 			Infinite Synthesis x64			
+ 											
+ 파일 명: page.c			
+ 설명: 32비트 커널의 메인
+ 최초 작성: 2019-02-15 						
 ********************************************/
 
 #include "stdkernel.h"
 #include "memsys.h"
+#include "syscheck.h"
 
-void Kernel32main() {
-	print("Infinite Synthesis Startup", 0, 0, 0x0E);
-	//페이징 활성화
-	initPage();        
-	//64비트 커널 복사
+void Kernel32main(){
+	// 메모리 체크
+	if(isMemEnough())
+		print("Memory Size Check ................... [OK]", 1, 0, 0x0F);
+	else{
+		print("Memory Size Check ................... [FAIL]", 1, 0, 0x0F);
+		print("Infinite Synthesis need more than 64Mbyte", 2, 0, 0x0F);
+		while(1);
+	}
+	
+	// 64비트 지원 확인
+	isSupportLongMode();
+	print("64bit Support Check ................. [OK]", 2, 0, 0x0F);
+	
+	// 페이지 테이블 초기화
+	initPaging();
+	print("Paging Initialize ................... [OK]", 3, 0, 0x0F);
+	
 	moveKernel();
-	//IA-32e 활성화
-	enteringLongMode();
-	//64비트 커널로 이동
-	__asm__ __volatile__("jmp 0x08:0x200000");
+	while(1);
 }
 
 void moveKernel(){
@@ -26,11 +37,11 @@ void moveKernel(){
 	unsigned int *destAddress;
 	unsigned int *checksum;
 	
-	srcAddress = (unsigned int*)0x1035A;
+	srcAddress = (unsigned int*)0x10200;
 	destAddress = (unsigned int*)0x200000;
 	checksum = (unsigned int*)srcAddress++;
 	
-	while(*srcAddress != 0 || *checksum != 0){
+	while(srcAddress != 0 || checksum != 0){
 		*destAddress = *srcAddress;
 		destAddress++;
 		srcAddress++;
@@ -38,33 +49,3 @@ void moveKernel(){
 	}
 }
 
-void enteringLongMode(){
-	__asm__ __volatile__(
-		//CR3.PAE(5) 활성화
-		"mov eax, cr4;"
-		"or eax, 0x20;"
-		"mov cr4, eax;"
-	
-		//PML4 로드
-		"mov eax, 0x100000;"
-		"mov cr3, eax;"
-		
-		//IA32_EFER.LME(8) 활성화
-		"mov ecx, 0xC0000080;"
-		"rdmsr;"
-		"or eax, 1 << 8;"
-		"wrmsr;"
-
-		//CR0.NW(29), CR0.CD(30) 비활성화
-		//CR0.PG(31) 활성화
-		"mov eax, cr0;"
-		"or eax, 1 << 29;"
-		"or eax, 1 << 30;"
-		"or eax, 1 << 31;"
-
-		"xor eax, 1 << 29;"
-		"xor eax, 1 << 30;"
-
-		"mov cr0, eax;"
-	);
-}

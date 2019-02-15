@@ -1,32 +1,38 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;			Infinite Synthesis x64			;
-;											;
-;파일 명: loadkernel.asm						;
-;설명: Infinite Synthesis의 기본 커널로더		;
-;최초 작성: 2019-01-22 						;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;  	  어셈블리 단위의 작업을 위한 미래 예약용	;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
 [ORG 0x10000]
 [BITS 32]
 
-section .text
-
-global PROTECTED
-
 PROTECTED:
-	mov ax, 0x20 ;세그먼트 셀렉터 초기화
+	mov ax, 0x10
+	mov gs, ax
+	mov ss, ax
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
-	mov gs, ax
-	mov ss, ax
 	
-	mov ebp, 0xFFFE	;스택 초기화
-	mov esp, 0xFFFE
-	
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;	
-;./Kernel32/init32.c의 코드가 이후 바로 실행됨;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+	mov ebp, PROTECTED
+	mov esp, PROTECTED
 
+	mov ebx, 0			; 매세지 출력 준비
+	lea esi, [message]
+	push es				; es에 들어있는 데이터세그 값을 저장함
+	mov ax, 0x28 ; 비디오 세그먼트 값 넣고
+	mov es, ax
+	mov ah, 0x0E
+
+MESSAGE:
+	lodsb
+	mov byte [es:ebx], al	;비디오 메모리:EDI에 al 넣고
+	inc ebx					;비디오 메모리 오프셋 늘리고
+	mov byte [es:ebx], ah	;속성값 넣고
+	inc ebx					;edi 늘리고 
+	cmp al, 0				;0인지 확인하고
+	jz LOADKERNEL
+	jmp MESSAGE
+
+LOADKERNEL:
+	pop es
+	jmp dword 0x08:0x10200
+
+message: db 'Infinite Synthesis Kernel Start', 0
+
+times 512 - ($ - $$) db 0x00
