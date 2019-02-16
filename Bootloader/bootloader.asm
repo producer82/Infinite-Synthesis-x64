@@ -39,7 +39,7 @@ read_init:
 	int 0x13
 			
 	;불러올 주소를 설정
-	mov si, 0x1000z	
+	mov si, 0x1000
 	mov es, si
 	mov bx, 0x0000	
 	

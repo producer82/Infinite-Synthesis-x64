@@ -28,8 +28,11 @@ void Kernel32main(){
 	initPaging();
 	print("Paging Initialize ................... [OK]", 3, 0, 0x0F);
 	
+	// 커널 복사
 	moveKernel();
-	while(1);
+	print("Kernel Copy ......................... [OK]", 4, 0, 0x0F);
+	
+	enableLongMode();
 }
 
 void moveKernel(){
@@ -37,15 +40,42 @@ void moveKernel(){
 	unsigned int *destAddress;
 	unsigned int *checksum;
 	
-	srcAddress = (unsigned int*)0x10200;
+	srcAddress = (unsigned int*)0x10692;
 	destAddress = (unsigned int*)0x200000;
 	checksum = (unsigned int*)srcAddress++;
 	
-	while(srcAddress != 0 || checksum != 0){
+	while(*srcAddress != 0 || *checksum != 0){
 		*destAddress = *srcAddress;
 		destAddress++;
 		srcAddress++;
 		checksum++;
 	}
+}
+
+void enableLongMode(){
+	__asm__ __volatile__(	
+		//cr3 = pageMapLevel4
+		"mov eax, 0x100000;"
+		"mov cr3, eax;"
+		
+		//IA-32e 활성화
+		"mov ecx, 0xC0000080;"
+		"rdmsr;"
+		"or eax, 1 << 8;"
+		"wrmsr;"
+	
+		//CR3.PAE(5) 활성화
+		"mov eax, cr4;"
+		"or eax, 0x20;"
+		"mov cr4, eax;"
+		
+		//CR0.PG(31) 활성화
+		"mov eax, cr0;"
+		"or eax, 1 << 31;"
+		"mov cr0, eax;"
+		
+		//CS = 0x18 (IA-32e CODE)
+		"jmp  0x18:0x200000"
+	);
 }
 
