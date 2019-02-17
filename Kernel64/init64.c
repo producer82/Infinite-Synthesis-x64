@@ -1,3 +1,11 @@
+/********************************************
+ 			Infinite Synthesis x64			
+ 											
+ 파일 명: init64.c
+ 설명: 64비트 커널의 메인
+ 최초 작성: 2019-02-16 						
+********************************************/
+
 #include "stdkernel.h"
 
 void Kernel64main(){
@@ -11,6 +19,8 @@ void Kernel64main(){
 	);
 	
 	print("Load 64bit Kernel ................... [OK]", 5, 0, 0x0F);
+	
+	
 	
 	while(1);
 }
