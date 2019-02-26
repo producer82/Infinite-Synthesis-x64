@@ -13,3 +13,4 @@
 
 void print(char* str, int line, int column, unsigned char color);
 void moveKernel();
+void enableLongMode();

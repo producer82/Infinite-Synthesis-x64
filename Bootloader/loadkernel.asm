@@ -26,9 +26,42 @@ MESSAGE:
 	mov byte [es:ebx], ah	;속성값 넣고
 	inc ebx					;edi 늘리고 
 	cmp al, 0				;0인지 확인하고
-	jz LOADKERNEL
+	jz PICINIT
 	jmp MESSAGE
+	
+PICINIT:			
+	mov al,0x11			;PIC 초기화 시작         
+	out 0x20, al
+	dw 0x00eb, 0x00eb	   
+	out 0xA0, al
+	dw 0x00eb, 0x00eb
 
+	mov al, 0x20		;마스터 PIC 인터럽트 시작               
+	out 0x21, al
+	dw 0x00eb, 0x00eb
+	mov al, 0x28		;슬레이브 PIC 인터럽트 시작         
+	out 0xA1, al
+	dw 0x00eb, 0x00eb
+
+	mov al, 0x04		;마스터-슬레이브 연결 설정          
+	out 0x21, al		
+	dw 0x00eb, 0x00eb
+	mov al, 0x02		        
+	out 0xA1, al		   
+	dw 0x00eb, 0x00eb
+
+	mov al, 0x01		;8086 모드 사용         
+	out 0x21, al	
+	dw 0x00eb, 0x00eb
+	out 0xA1, al
+	dw 0x00eb, 0x00eb
+
+	mov al, 0xFF		;슬레이브 PIC의 모든 인터럽트 중지          
+	out 0xA1, al
+	dw 0x00eb, 0x00eb
+	mov al, 0xFB		;마스터 PIC의 IRQ 2번만 개방 (슬레이브 PIC로의 통로)              
+	out 0x21, al
+	
 LOADKERNEL:
 	pop es
 	jmp dword 0x08:0x10200

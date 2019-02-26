@@ -7,3 +7,7 @@
 ********************************************/
 
 #include "drivers.h"
+
+void initKeyboard(){
+	
+}

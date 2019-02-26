@@ -7,6 +7,8 @@
 ********************************************/
 
 #include "stdkernel.h"
+#include "descriptor.h"
+#include "drivers.h"
 
 void Kernel64main(){
 	__asm__ __volatile__ (
@@ -17,10 +19,18 @@ void Kernel64main(){
 		"mov fs, ax;"
 		"mov ss, ax;"
 	);
-	
 	print("Load 64bit Kernel ................... [OK]", 5, 0, 0x0F);
 	
+	initInterrupt();
+	print("Interrupt Setting ................... [OK]", 6, 0, 0x0F);
 	
+	//initKeyboard();
+	print("Setting for I/O Device .............. [OK]", 7, 0, 0x0F);
+	
+	//initFileSystem();
+	print("Load File System .................... [OK]", 8, 0, 0x0F);
+	
+	//
 	
 	while(1);
 }

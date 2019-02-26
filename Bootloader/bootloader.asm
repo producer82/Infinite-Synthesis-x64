@@ -75,7 +75,7 @@ readDisk:
 	
 readError:			;읽기 실패시 더 이상 진행하지 않게 무한루프                        
 	jmp $                
-		
+
 ;A20 GATE 활성화
 a20BiosEnable:			    
 	mov ax, 0x2401
