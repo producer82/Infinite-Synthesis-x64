@@ -9,6 +9,7 @@
 #include "stdkernel.h"
 #include "descriptor.h"
 #include "drivers.h"
+#include "shell.h"
 
 void Kernel64main(){
 	__asm__ __volatile__ (
@@ -30,7 +31,7 @@ void Kernel64main(){
 	//initFileSystem();
 	print("Load File System .................... [OK]", 8, 0, 0x0F);
 	
-	//
+	enterShell();
 	
 	while(1);
 }

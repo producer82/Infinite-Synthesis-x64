@@ -1,8 +1,8 @@
 /********************************************
  			Infinite Synthesis x64			
  											
- 파일 명: idt.c			
- 설명: 인터럽트 서술자 테이블 설정 및 핸들러
+ 파일 명: interrupt.c			
+ 설명: 인터럽트 서술자 테이블 설정 및 ISR 함수
  최초 작성: 2019-02-17 						
 ********************************************/
 
@@ -10,7 +10,7 @@
 #include "stdkernel.h"
 
 char key[1] = {0};
-char *inputStr;
+char *inputStr = 
 
 void initInterrupt(){
 	IDTR *idtr;
@@ -27,10 +27,13 @@ void initInterrupt(){
 		setIDTEntry(&(intTableEntry[i]), isrDummy, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 	}
 
-	//타이머 인터럽트를 맵핑함
+	//Divide by Zero 인터럽트
+	setIDTEntry(&(intTableEntry[0]), isrDivideByZero, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
+	
+	//타이머 인터럽트
 	setIDTEntry(&(intTableEntry[32]), isrTimer, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 
-	//키보드 인터럽트를 맵핑함
+	//키보드 인터럽트
 	setIDTEntry(&(intTableEntry[33]), isrKeyboard, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 	
 	// 인터럽트 활성화
@@ -56,6 +59,12 @@ void setIDTEntry(IDT *entry, void* isrAddress, unsigned short selector, unsigned
 
 void isrDummy(){
 	saveStatus;
+	restoreStatus;
+}
+
+void isrDivideByZero(){
+	saveStatus;
+	
 	restoreStatus;
 }
 
