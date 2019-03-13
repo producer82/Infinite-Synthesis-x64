@@ -63,6 +63,7 @@ typedef struct GDTR{
 
 void initInterrupt();
 void setIDTEntry(IDT *entry, void* isrAddress, unsigned short selector, unsigned char ist, unsigned char typeAndAttribute);
+void isrDivideByZero();
 void isrDummy();
 void isrTimer();
 void isrKeyboard();

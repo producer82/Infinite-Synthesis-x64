@@ -8,40 +8,51 @@
 #		탭을 스페이스바로 입력하지 말 것.		#
 #############################################
 
-all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
+CC32=gcc -m32
+CC64=gcc -m64
+CFLAGS=-c -masm=intel -ffreestanding
+INCLUDE32=./include/x86
+INCLUDE64=./include
+NASM=nasm -f bin
+
+
+all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o keyboard.o shell.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
 
 ###########################부트로더 빌드###########################
 bootloader.img: ./boot/bootloader.asm
-	nasm -f bin -o ./boot/bootloader.img ./boot/bootloader.asm
+	$(NASM) ./boot/bootloader.asm -o ./boot/bootloader.img
 	
 loadkernel.img: ./boot/loadkernel.asm
-	nasm -f bin -o ./boot/loadkernel.img ./boot/loadkernel.asm
+	$(NASM) ./boot/loadkernel.asm -o ./boot/loadkernel.img 
 	
 ###########################32비트 커널 빌드###########################	
 init32.o: ./init/init32.c
-	gcc -c -masm=intel -m32 -ffreestanding ./init/init32.c -o ./init/init32.o
+	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./init/$@
 
 page.o: ./kernel/x86/page.c
-	gcc -c -masm=intel -m32 -ffreestanding ./kernel/x86/page.c -o ./kernel/x86/page.o
+	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./kernel/x86/$@
 
 syscheck.o: ./kernel/x86/syscheck.c
-	gcc -c -masm=intel -m32 -ffreestanding ./kernel/x86/syscheck.c -o ./kernel/x86/syscheck.o
+	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./kernel/x86/$@
 	
 stdkernel.o: ./lib/x86/stdkernel.c
-	gcc -c -masm=intel -m32 -ffreestanding ./lib/x86/stdkernel.c -o ./lib/stdkernel.o
+	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./lib/x86/$@
 	
 ###########################64비트 커널 빌드###########################	
 init64.o: ./init/init64.c
-	gcc -c -masm=intel -m64 -ffreestanding ./init/init64.c -o ./init/init64.o
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./init/$@
 	
 stdkernel64.o: ./lib/stdkernel.c
-	gcc -c -masm=intel -m64 -ffreestanding ./lib/stdkernel.c -o ./lib/stdkernel.o
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./lib/$@
 	
 idt.o: ./kernel/idt.c
-	gcc -c -masm=intel -m64 -ffreestanding ./kernel/idt.c -o ./kernel/idt.o
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 keyboard.o: ./drivers/keyboard.c
-	gcc -c -masm=intel -m64 -ffreestanding ./drivers/keyboard.c -o ./drivers/keyboard.o
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./drivers/$@
+	
+shell.o: ./kernel/shell/shell.c
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/shell/$@
 	
 ###########################커널 이미지 빌드###########################
 Kernel32N.img: 
@@ -51,7 +62,7 @@ Kernel32.img: ./Kernel32N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel32N.img ./Kernel32.img
 
 Kernel64N.img: 
-	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel.o ./kernel/idt.o -o ./Kernel64N.img
+	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel64.o ./kernel/idt.o ./kernel/shell/shell.o ./drivers/keyboard.o -o ./Kernel64N.img
 	
 Kernel64.img: ./Kernel64N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel64N.img ./Kernel64.img
@@ -61,6 +72,6 @@ Disk.img: ./boot/bootloader.img ./boot/loadkernel.img ./Kernel32.img ./Kernel64.
 	cat ./boot/bootloader.img ./boot/loadkernel.img ./Kernel32.img ./Kernel64.img > Disk.img
 	
 clean:
-	rm -rf ./boot/bootloader.img ./boot/loadkernel.img 
-	rm -rf ./init/init32.o ./kernel/x86/page.o ./kernel/x86/syscheck.o ./lib/stdkernel.o
-	rm -rf ./init/init64.o ./lib/stdkernel.o ./kernel/idt.o ./drivers/keyboard.o
+	rm -rf ./boot/*.img
+	rm -rf ./Kernel32.img ./Kernel32N.img ./Kernel64.img ./Kernel64N.img
+	find ./ -name '*.o' -exec rm {} \;

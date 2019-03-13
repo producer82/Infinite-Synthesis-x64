@@ -25,7 +25,7 @@ void Kernel64main(){
 	initInterrupt();
 	print("Interrupt Setting ................... [OK]", 6, 0, 0x0F);
 	
-	//initKeyboard();
+	initKeyboard();
 	print("Setting for I/O Device .............. [OK]", 7, 0, 0x0F);
 	
 	//initFileSystem();

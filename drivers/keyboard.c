@@ -6,7 +6,18 @@
  최초 작성: 2019-02-17 						
 ********************************************/
 
+/****TODO****/
+// 대문자 입력
+// 특수문자 입력
+// LED 제어
+// 활성화시 포트 검사
+/************/
 #include "drivers.h"
+
+// 키보드 입력에 쓰이는 변수
+char inputStr[200];
+unsigned char data;
+unsigned char index;
 
 // 키보드 장치 활성화
 void initKeyboard(){
@@ -14,8 +25,34 @@ void initKeyboard(){
 	__asm__ __volatile__ ("out 0x64, al");
 }
 
+void isBufferFull(){
+	
+}
+
+void getInput(){
+	// 입력을 받아 AL에 저장함
+	__asm__ __volatile__(
+		"xor al, al;"
+		"in al, 0x60;"
+		"mov %0, al;":"=m"(data)
+	);
+	
+	// 스캔코드를 아스키 코드로 변환
+	data = smallAsciiSet(data);
+	
+	// 백 스페이스 입력 시
+	if (data == 0x08 && index != 0){
+		inputStr[--index] = 0;
+	}
+	
+	// 문자 입력 시
+	else if (data != 0xFF && data != 0x08 && data != 0x0D){
+		inputStr[index++] = data;
+	}
+}
+
 // 스캔코드 -> 소문자 아스키 변환 테이블
-unsigned char smallAsciiSet(char data){
+unsigned char smallAsciiSet(unsigned char data){
 	switch(data){
 		case(0x1E): return 'a'; break;
 		case(0x30): return 'b'; break;

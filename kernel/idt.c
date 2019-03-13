@@ -8,9 +8,11 @@
 
 #include "descriptor.h"
 #include "stdkernel.h"
+#include "drivers.h"
 
 char key[1] = {0};
-char *inputStr = 
+extern char inputStr[200];
+extern unsigned char shellLine;
 
 void initInterrupt(){
 	IDTR *idtr;
@@ -80,26 +82,9 @@ void isrTimer(){
 void isrKeyboard(){
 	saveStatus;
 	
-	// 입력을 받아 AL에 저장함
-	__asm__ __volatile__(
-		"xor al, al;"
-		"in al, 0x60;"
-		"mov %0, al;":"=m"(data)
-	);
+	getInput();
 	
-	// 스캔코드를 아스키 코드로 변환
-	data = smallAsciiSet(data);
-	
-	// 백 스페이스 입력 시
-	if (data == 0x08 && index != 0){
-		inputStr[--index] = 0;
-	}
-	// 문자 입력 시
-	else if (data != 0xFF && data != 0x08 && data != 0x0D){
-		inputStr[index++] = data;
-	}
-	
-	clearLine(shellLine, 10*2);
+	clearLine(shellLine, 10);
 	print(inputStr, shellLine, 10, 0x0F);
 	
 	restoreStatus;
