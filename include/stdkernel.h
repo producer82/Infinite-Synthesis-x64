@@ -13,4 +13,5 @@
 
 void print(char* str, int line, int column, unsigned char color);
 void clearLine(unsigned char line, unsigned char column);
+void clear();
 void moveKernel();

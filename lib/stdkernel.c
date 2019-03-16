@@ -8,10 +8,8 @@
 
 #include "stdkernel.h"
 
-// 문자열을 화면에 출력해주는 함수, printf()의 기능
+// 문자열 출력
 void print(char* str, int line, int column, unsigned char color) {
-	// 비디오 메모리 주소 = 0xB8000
-	// 한 문자 = 2 바이트, 한 줄 = 160 바이트
 	char *video = (char*)(0xB8000 + 160 * line + (column * 2));	
 	
 	for (int i = 0; str[i] != 0; i++)
@@ -21,6 +19,16 @@ void print(char* str, int line, int column, unsigned char color) {
 	}
 }
 
+// 화면 초기화
+void clear(){
+	char *video = (char*)0xB8000;
+	
+	for (int i = 0; i < 80 * 25 * 2; i++){
+		*video++ = 0;
+	}
+}
+
+// 줄 단위의 초기화
 void clearLine(unsigned char line, unsigned char column){
 	char *video = (char*)(0xB8000 + 160 * line + (column * 2));
 	
