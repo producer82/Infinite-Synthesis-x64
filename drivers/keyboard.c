@@ -15,15 +15,15 @@
 #include "drivers.h"
 
 // 키보드 입력에 쓰이는 변수
-char inputStr[200];
-unsigned char data;
-unsigned char index;
+unsigned char inputStr[160];
+unsigned char data = 0;
+unsigned char keyboardIndex = 0;
 
 // 키보드 장치 활성화
 void initKeyboard(){
 	__asm__ __volatile__ ("mov al, 0xAE");
 	__asm__ __volatile__ ("out 0x64, al");
-}
+} 
 
 void isBufferFull(){
 	
@@ -41,13 +41,13 @@ void getInput(){
 	data = smallAsciiSet(data);
 	
 	// 백 스페이스 입력 시
-	if (data == 0x08 && index != 0){
-		inputStr[--index] = 0;
+	if (data == 0x08 && keyboardIndex != 0){
+		inputStr[--keyboardIndex] = 0;
 	}
 	
 	// 문자 입력 시
 	else if (data != 0xFF && data != 0x08 && data != 0x0D){
-		inputStr[index++] = data;
+		inputStr[keyboardIndex++] = data;
 	}
 }
 
