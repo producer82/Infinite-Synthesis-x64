@@ -12,8 +12,8 @@
 extern unsigned char shellLine;
 
 void osVersion(){
-	print("--------===========Infinite Synthesis x64 Alpha===========--------", shellLine, 0, 0x0F);
+	print("--------===========Infinite Synthesis x64 Alpha===========--------", shellLine, 7, 0x0F);
 	processScroll();
-	print("                      Synthesis Shell Alpha", shellLine, 0, 0x0F);
+	print("                      Synthesis Shell Alpha", shellLine, 7, 0x0F);
 	processScroll();
 }
