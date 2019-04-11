@@ -1,14 +1,14 @@
 /********************************************
  			Infinite Synthesis x64			
  											
- ÆÄÀÏ ¸í: stdkernel.c		
- ¼³¸í: 32ºñÆ® Ä¿³ÎÀ» À§ÇÑ ¶óÀÌºê·¯¸®
- ÃÖÃÊ ÀÛ¼º: 2019-02-15 						
+ íŒŒì¼ ëª…: stdkernel.c		
+ ì„¤ëª…: 32ë¹„íŠ¸ ì»¤ë„ì„ ìœ„í•œ ë¼ì´ë¸ŒëŸ¬ë¦¬
+ ìµœì´ˆ ì‘ì„±: 2019-02-15 						
 ********************************************/
 
 #include "stdkernel.h"
 
-// ¹®ÀÚ¿­ Ãâ·Â
+// ë¬¸ìì—´ ì¶œë ¥
 void print(char* str, int line, int column, unsigned char color) {
 	char *video = (char*)(0xB8000 + 160 * line + (column * 2));	
 	
@@ -19,7 +19,7 @@ void print(char* str, int line, int column, unsigned char color) {
 	}
 }
 
-// È­¸é ÃÊ±âÈ­
+// í™”ë©´ ì´ˆê¸°í™”
 void clear(){
 	char *video = (char*)0xB8000;
 	
@@ -28,11 +28,22 @@ void clear(){
 	}
 }
 
-// ÁÙ ´ÜÀ§ÀÇ ÃÊ±âÈ­
+// ì¤„ ë‹¨ìœ„ì˜ ì´ˆê¸°í™”
 void clearLine(unsigned char line, unsigned char column){
 	char *video = (char*)(0xB8000 + 160 * line + (column * 2));
 	
 	for(int i=0; i<160 - column * 2; i++){
 		*video++ = 0;
 	}
+}
+
+char strcmp(char *str1, char *str2){
+	int i = 0;
+	while(str1[i] != 0 || str2[i] != 0){
+		if(str1[i] != str2[i]){
+			return 0;
+		}
+		i++;
+	}
+	return 1;
 }
