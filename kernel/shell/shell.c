@@ -40,7 +40,11 @@ void enterShell(){
 void interpretCommand(){
 	if(strcmp(inputStr, "help")){
 		comHelp();
-	}else{
+	}
+	else if(strcmp(inputStr, "version")){
+		comVersion();
+	}
+	else{
 		print("Synthesis: command not found", shellLine, 0, 0x0E);
 	}
 }
