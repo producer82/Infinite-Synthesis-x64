@@ -38,7 +38,11 @@ void enterShell(){
 }
 
 void interpretCommand(){
-	;
+	if(strcmp(inputStr, "help")){
+		comHelp();
+	}else{
+		print("Synthesis: command not found", shellLine, 0, 0x0E);
+	}
 }
 
 void processScroll(){
