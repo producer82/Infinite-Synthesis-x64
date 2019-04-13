@@ -17,3 +17,8 @@ void osVersion(){
 	print("                      Synthesis Shell Alpha", shellLine, 7, 0x0F);
 	processScroll();
 }
+
+void help(){
+	print("help		| show help", shellLine, 0, 0x0F);
+	processScroll();
+}

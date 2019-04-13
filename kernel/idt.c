@@ -10,9 +10,9 @@
 #include "stdkernel.h"
 #include "drivers.h"
 
-char key[1] = {0};
-extern char inputStr[200];
-extern unsigned char shellLine;
+char key[1] = {0};				//타이머 인터럽트 확인용 변수
+extern char inputStr[200];		//입력 문자열 저장 배열, keyboard.c
+extern unsigned char shellLine;	//출력할 줄 계산용 변수, shell.c
 
 void initInterrupt(){
 	IDTR *idtr;
@@ -66,7 +66,6 @@ void isrDummy(){
 
 void isrDivideByZero(){
 	saveStatus;
-	
 	restoreStatus;
 }
 
