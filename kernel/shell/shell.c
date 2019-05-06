@@ -25,7 +25,7 @@ void enterShell(){
 	// 아래 루틴을 수행하여 입력을 처리한다.
 	while(1){
 		if(data == 0x0D){
-			//interpretCommand();
+			//interpreteCommand();
 			processScroll();
 			print("Synthesis>", shellLine, 0, 0x09);
 			data = 0;
@@ -37,7 +37,7 @@ void enterShell(){
 	}
 }
 
-void interpretCommand(){
+void interpreteCommand(){
 	;
 }
 
