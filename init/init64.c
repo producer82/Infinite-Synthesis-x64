@@ -22,14 +22,17 @@ void Kernel64main(){
 	);
 	print("Load 64bit Kernel ................... [OK]", 5, 0, 0x0F);
 	
+	initGDT();
+	print("GDT Setting ......................... [OK]", 6, 0, 0x0F);
+	
 	initInterrupt();
-	print("Interrupt Setting ................... [OK]", 6, 0, 0x0F);
+	print("Interrupt Setting ................... [OK]", 7, 0, 0x0F);
 	
 	initKeyboard();
-	print("Setting for I/O Device .............. [OK]", 7, 0, 0x0F);
+	print("Setting for I/O Device .............. [OK]", 8, 0, 0x0F);
 	
 	//initFileSystem();
-	print("Load File System .................... [OK]", 8, 0, 0x0F);
+	print("Load File System .................... [OK]", 9, 0, 0x0F);
 	
 	enterShell();
 	

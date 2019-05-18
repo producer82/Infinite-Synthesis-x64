@@ -1,11 +1,11 @@
 #############################################
 #			Infinite Synthesis x64	  		#
 #											#
-# ÆÄÀÏ ¸í: makefile							#
-# ¼³¸í: Infinite Synthesis ºôµå ¿ë makefile	#
-# ÃÖÃÊ ÀÛ¼º: 2019-01-22						#
+# íŒŒì¼ ëª…: makefile							#
+# ì„¤ëª…: Infinite Synthesis ë¹Œë“œ ìš© makefile	#
+# ìµœì´ˆ ì‘ì„±: 2019-01-22						#
 #############################################
-#		ÅÇÀ» ½ºÆäÀÌ½º¹Ù·Î ÀÔ·ÂÇÏÁö ¸» °Í.		#
+#		íƒ­ì„ ìŠ¤í˜ì´ìŠ¤ë°”ë¡œ ì…ë ¥í•˜ì§€ ë§ ê²ƒ.		#
 #############################################
 
 CC32=gcc -m32
@@ -16,16 +16,16 @@ INCLUDE64=./include
 NASM=nasm -f bin
 
 
-all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
+all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o gdt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
 
-###########################ºÎÆ®·Î´õ ºôµå###########################
+###########################ë¶€íŠ¸ë¡œë” ë¹Œë“œ###########################
 bootloader.img: ./boot/bootloader.asm
 	$(NASM) ./boot/bootloader.asm -o ./boot/bootloader.img
 	
 loadkernel.img: ./boot/loadkernel.asm
 	$(NASM) ./boot/loadkernel.asm -o ./boot/loadkernel.img 
 	
-###########################32ºñÆ® Ä¿³Î ºôµå###########################	
+###########################32ë¹„íŠ¸ ì»¤ë„ ë¹Œë“œ###########################	
 init32.o: ./init/init32.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./init/$@
 
@@ -38,7 +38,7 @@ syscheck.o: ./kernel/x86/syscheck.c
 stdkernel.o: ./lib/x86/stdkernel.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./lib/x86/$@
 	
-###########################64ºñÆ® Ä¿³Î ºôµå###########################	
+###########################64ë¹„íŠ¸ ì»¤ë„ ë¹Œë“œ###########################	
 init64.o: ./init/init64.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./init/$@
 	
@@ -48,18 +48,21 @@ stdkernel64.o: ./lib/stdkernel.c
 idt.o: ./kernel/idt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
-### µå¶óÀÌ¹ö ºôµå
+gdt.o: ./kernel/gdt.c
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
+	
+### ë“œë¼ì´ë²„ ë¹Œë“œ
 keyboard.o: ./drivers/keyboard.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./drivers/$@
 	
-### ¼Ğ ºôµå
+### ì…¸ ë¹Œë“œ
 shell.o: ./kernel/shell/shell.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/shell/$@
 	
 sh_routine.o: ./kernel/shell/sh_routine.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/shell/$@
 	
-###########################Ä¿³Î ÀÌ¹ÌÁö ºôµå###########################
+###########################ì»¤ë„ ì´ë¯¸ì§€ ë¹Œë“œ###########################
 Kernel32N.img: 
 	ld -T ./elf_i386.x -nostdlib ./init/init32.o ./kernel/x86/page.o ./kernel/x86/syscheck.o ./lib/x86/stdkernel.o -o ./Kernel32N.img
 	
@@ -67,12 +70,12 @@ Kernel32.img: ./Kernel32N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel32N.img ./Kernel32.img
 
 Kernel64N.img: 
-	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel64.o ./kernel/idt.o ./kernel/shell/shell.o ./drivers/keyboard.o ./kernel/shell/sh_routine.o -o ./Kernel64N.img
+	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel64.o ./kernel/idt.o ./kernel/gdt.o ./kernel/shell/shell.o ./drivers/keyboard.o ./kernel/shell/sh_routine.o -o ./Kernel64N.img
 	
 Kernel64.img: ./Kernel64N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel64N.img ./Kernel64.img
 	
-###########################¿î¿µÃ¼Á¦ ÀÌ¹ÌÁö ºôµå###########################	
+###########################ìš´ì˜ì²´ì œ ì´ë¯¸ì§€ ë¹Œë“œ###########################	
 Disk.img: ./boot/bootloader.img ./boot/loadkernel.img ./Kernel32.img ./Kernel64.img
 	cat ./boot/bootloader.img ./boot/loadkernel.img ./Kernel32.img ./Kernel64.img > Disk.img
 	

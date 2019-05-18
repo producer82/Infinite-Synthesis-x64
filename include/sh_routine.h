@@ -6,4 +6,6 @@
  최초 작성: 2019-03-13 						
 ********************************************/
 
-void osVersion();
+void binVersion();
+void binHelp();
+void binClear();

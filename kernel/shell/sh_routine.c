@@ -1,9 +1,9 @@
 /********************************************
  			Infinite Synthesis x64			
  											
- ÆÄÀÏ ¸í: sh_routine.c			
- ¼³¸í: Synthesis ShellÀÇ ¸í·É¾î¸¦ À§ÇÑ ·çÆ¾ ¸ğÀ½
- ÃÖÃÊ ÀÛ¼º: 2019-03-13 						
+ íŒŒì¼ ëª…: sh_routine.c			
+ ì„¤ëª…: Synthesis Shellì˜ ëª…ë ¹ì–´ë¥¼ ìœ„í•œ ë£¨í‹´ ëª¨ìŒ
+ ìµœì´ˆ ì‘ì„±: 2019-03-13 						
 ********************************************/
 
 #include "stdkernel.h"
@@ -11,14 +11,23 @@
 
 extern unsigned char shellLine;
 
-void osVersion(){
-	print("--------===========Infinite Synthesis x64 Alpha===========--------", shellLine, 7, 0x0F);
+void binVersion(){
 	processScroll();
-	print("                      Synthesis Shell Alpha", shellLine, 7, 0x0F);
+	print("--------===========Infinite Synthesis x64 Alpha===========--------", shellLine, 6, 0x0F);
 	processScroll();
+	print("                      Synthesis Shell Alpha", shellLine, 6, 0x0F);
 }
 
-void help(){
-	print("help		| show help", shellLine, 0, 0x0F);
+void binHelp(){
 	processScroll();
+	print("help     | Show help", shellLine, 0, 0x0F);
+	processScroll();
+	print("clear    | Clear screen", shellLine, 0, 0x0F);
+	processScroll();
+	print("version  | Show OS version", shellLine, 0, 0x0F);
+}
+
+void binClear(){
+	clear();
+	shellLine = 0;
 }

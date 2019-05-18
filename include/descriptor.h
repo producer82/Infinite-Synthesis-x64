@@ -31,7 +31,8 @@
 	"leave;"\
 	"iretq;"\
 );
-	
+
+//IDT 관련 구조체
 typedef struct IDT{
 	unsigned short lowerOffset;
 	unsigned short selector;
@@ -47,6 +48,7 @@ typedef struct IDTR{
 	unsigned long base;
 }__attribute__((packed)) IDTR;
 
+//GDT 관련 구조체
 typedef struct GDT{
 	unsigned short lowerLimitAddress;
 	unsigned short lowerBaseAddress;
@@ -61,9 +63,12 @@ typedef struct GDTR{
 	unsigned int offset;
 }__attribute__((packed)) GDTR;
 
+// 인터럽트 테이블 관련 함수
 void initInterrupt();
 void setIDTEntry(IDT *entry, void* isrAddress, unsigned short selector, unsigned char ist, unsigned char typeAndAttribute);
 void isrDivideByZero();
 void isrDummy();
 void isrTimer();
 void isrKeyboard();
+
+// GDT 관련 함수
