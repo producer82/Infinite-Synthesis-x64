@@ -1,18 +1,18 @@
 /********************************************
  			Infinite Synthesis x64			
  											
- фдюо ╦М: interrupt.c			
- ╪Ё╦М: юнем╥╢ф╝ ╪╜╪Зюз евюл╨М ╪Ёа╓ ╧в ISR гт╪Ж
- цжцй юш╪╨: 2019-02-17 						
+ М▄▄Л²╪ К╙┘: interrupt.c			
+ Л└╓К╙┘: Л²╦М└╟К÷╫М┼╦ Л└°Л┬═Л·░ М┘▄Л²╢К╦■ Л└╓Л═∙ К╟▐ ISR М∙╗Л┬≤
+ Л╣°Л╢┬ Л·▒Л└╠: 2019-02-17 						
 ********************************************/
 
 #include "descriptor.h"
 #include "stdkernel.h"
 #include "drivers.h"
 
-char key[1] = {0};				//е╦юл╦с юнем╥╢ф╝ х╝юн©К ╨╞╪Ж
-extern char inputStr[200];		//ют╥б ╧╝юз©╜ юЗюЕ ╧Х©╜, keyboard.c
-extern unsigned char shellLine;	//цБ╥бгр аы ╟Х╩Й©К ╨╞╪Ж, shell.c
+char key[1] = {0};				//М┐─Л²╢К╗╦ Л²╦М└╟К÷╫М┼╦ М≥∙Л²╦Л ╘ КЁ─Л┬≤
+extern char inputStr[200];		//Л·┘К═╔ К╛╦Л·░Л≈╢ Л═─Л·╔ К╟╟Л≈╢, keyboard.c
+extern unsigned char shellLine;	//Л╤°К═╔М∙═ Л╓└ ЙЁ└Л┌╟Л ╘ КЁ─Л┬≤, shell.c
 
 void initInterrupt(){
 	IDTR *idtr;
@@ -24,26 +24,26 @@ void initInterrupt(){
 	idtr->limit = (sizeof(IDT) * 256) - 1;
 	idtr->base = 0x0000;
 	
-	//╧╚╫ц╣г╢б юнем╥╢ф╝╦╕ ╦йгнгт
+	//К╛╢Л▀°К░≤К┼■ Л²╦М└╟К÷╫М┼╦К╔╪ К╖╣М∙▒М∙╗
 	for(int i = 0; i < 256; i++){
 		setIDTEntry(&(intTableEntry[i]), isrDummy, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 	}
 
-	//Divide by Zero юнем╥╢ф╝
+	//Divide by Zero Л²╦М└╟К÷╫М┼╦
 	setIDTEntry(&(intTableEntry[0]), isrDivideByZero, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 	
-	//е╦юл╦с юнем╥╢ф╝
+	//М┐─Л²╢К╗╦ Л²╦М└╟К÷╫М┼╦
 	setIDTEntry(&(intTableEntry[32]), isrTimer, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 
-	//е╟╨╦╣Е юнем╥╢ф╝
+	//М┌╓КЁ╢К⌠° Л²╦М└╟К÷╫М┼╦
 	setIDTEntry(&(intTableEntry[33]), isrKeyboard, 0x18, 0, IDT_PRESENT | IDT_INT_GATE);
 	
-	// юнем╥╢ф╝ х╟╪╨х╜
+	// Л²╦М└╟К÷╫М┼╦ М≥°Л└╠М≥■
 	__asm__ __volatile__("mov rax, %0"::"r"(idtr));
 	
 	__asm__ __volatile__(
 			"lidt [rax];"
-			"mov al, 0xFC;"	// е╟╨╦╣Е, е╦юл╦с юнем╥╢ф╝ ╟Ё╧Ф
+			"mov al, 0xFC;"	// М┌╓КЁ╢К⌠°, М┐─Л²╢К╗╦ Л²╦М└╟К÷╫М┼╦ Й╟°К╟╘
 			"out 0x21, al;"
 			"sti;"
 	);
