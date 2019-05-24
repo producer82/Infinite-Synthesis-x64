@@ -4,7 +4,7 @@
 * 개발 언어 : C, Assembly
 * 개발 도구 : GCC Cross-Compiler, NASM, make, qemu 및 vmware
 
-### 스펙 및 요구사항
+# 스펙 및 요구사항
 * 아키텍쳐 : x86_64
 * 운영체제 최대 지원 메모리 : 64GB
 
@@ -12,7 +12,7 @@
 * 메모리 : 64MB 이상 요구
 * 하드디스크 : 파일 시스템 미지원
 
-## Progress
+# Progress
 ##### 부트로더 제작 - DONE
 ##### 32비트 전환 - DONE
 ##### C언어 커널 - DONE
