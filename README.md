@@ -1,8 +1,8 @@
 # Infinite-Synthesis-x64
 #### 심심할때마다 만드는 네이티브 운영체제 
 
-개발 언어 : C, Assembly
-개발 도구 : GCC Cross-Compiler, NASM, make, qemu 및 vmware
+* 개발 언어 : C, Assembly
+* 개발 도구 : GCC Cross-Compiler, NASM, make, qemu 및 vmware
 
 # 스펙 및 요구사항
 * 아키텍쳐 : x86_64
