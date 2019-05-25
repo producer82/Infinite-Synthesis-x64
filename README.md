@@ -24,8 +24,9 @@
 #### 기초적인 키보드 드라이버 - DONE
 #### 기초적인 셸 및 명령어 구현 - DONE
 #### GDT 재설정 - In Developing
-#### 파일 시스템 - In Developing
+#### 기초적인 하드디스크 드라이버 - In Developing
 
+#### 파일 시스템 - TODO
 #### 태스크 구현 - TODO
 #### 라운드 로빈 스케줄러 구현 - TODO
 #### 동적할당 구현 - TODO
