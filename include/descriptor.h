@@ -59,8 +59,8 @@ typedef struct GDT{
 }__attribute__((packed)) GDT;
 
 typedef struct GDTR{
-	unsigned char size;
-	unsigned int offset;
+	unsigned short size;
+	unsigned long offset;
 }__attribute__((packed)) GDTR;
 
 // 인터럽트 테이블 관련 함수
@@ -72,3 +72,5 @@ void isrTimer();
 void isrKeyboard();
 
 // GDT 관련 함수
+void initGDT();
+void setGDTEntry(GDT *entry, unsigned int baseAddress, unsigned int limitAddress, unsigned char accessByte, unsigned char flags);

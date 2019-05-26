@@ -1,0 +1,22 @@
+# Disk DescriptorFile
+version=1
+encoding="windows-949-2000"
+CID=fffffffe
+parentCID=ffffffff
+createType="twoGbMaxExtentSparse"
+
+# Extent description
+RW 8323072 SPARSE "Infinite Synthesis x64-s001.vmdk"
+RW 8323072 SPARSE "Infinite Synthesis x64-s002.vmdk"
+RW 131072 SPARSE "Infinite Synthesis x64-s003.vmdk"
+
+# The Disk Data Base 
+#DDB
+
+ddb.adapterType = "ide"
+ddb.geometry.cylinders = "16383"
+ddb.geometry.heads = "16"
+ddb.geometry.sectors = "63"
+ddb.longContentID = "fef768c6c305a945a9a37936fffffffe"
+ddb.uuid = "60 00 C2 95 1e 1b 35 5f-14 1c f6 f2 95 d4 86 b5"
+ddb.virtualHWVersion = "16"

@@ -25,6 +25,8 @@ void Kernel64main(){
 	initGDT();
 	print("GDT Setting ......................... [OK]", 6, 0, 0x0F);
 	
+	while(1);
+	
 	initInterrupt();
 	print("Interrupt Setting ................... [OK]", 7, 0, 0x0F);
 	
