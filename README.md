@@ -1,5 +1,5 @@
 # Infinite-Synthesis-x64
-#### 심심할때마다 만드는 네이티브 운영체제 
+#### 심심할때마다 밑바닥부터 만드는 운영체제 
 
 * 개발 언어 : C, Assembly
 * 개발 도구 : GCC Cross-Compiler, NASM, make, qemu 및 vmware
