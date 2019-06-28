@@ -9,11 +9,11 @@ void initGDT(){
 	gdtr->offset = (unsigned long)gdtEntry;
 	
 	//Null Descriptor 생성
-	setGDTEntry(&(gdtEntry[0]), 0, 0, 0, 0);
+	setGDTEntry(&gdtEntry[0], 0, 0, 0, 0);
 	//Code Descriptor 생성
-	setGDTEntry(&(gdtEntry[1]), 0, 0xFFFFF, 0x9A, 0xA0);
+	setGDTEntry(&gdtEntry[1], 0, 0xFFFFF, 0x9A, 0xA0);
 	//Data Descriptor 생성
-	setGDTEntry(&(gdtEntry[2]), 0, 0xFFFFF, 0x92, 0xA0);
+	setGDTEntry(&gdtEntry[2], 0, 0xFFFFF, 0x92, 0xA0);
 	
 	__asm__ __volatile__("cli");
 	__asm__ __volatile__("mov rax, 0x150000");
