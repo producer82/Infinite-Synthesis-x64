@@ -16,7 +16,7 @@ INCLUDE64=./include
 NASM=nasm -f bin
 
 
-all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o gdt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
+all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o gdt.o stdkernel64.o idt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
 
 ###########################부트로더 빌드###########################
 bootloader.img: ./boot/bootloader.asm
@@ -49,7 +49,7 @@ idt.o: ./kernel/idt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 gdt.o: ./kernel/gdt.c
-	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
+	$(CC32) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 ### 드라이버 빌드
 keyboard.o: ./drivers/keyboard.c
