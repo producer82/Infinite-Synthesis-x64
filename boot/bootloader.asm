@@ -100,9 +100,9 @@ entryToProtected:
 	nop
 	nop
 	
-	jmp dword 0x08:0x10000
+	jmp dword 0x18:0x10000
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;GDT ¿µ¿ª;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;GDT;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 GDTR:	
 	dw GDT_END - GDT - 1
@@ -116,20 +116,6 @@ GDT:
 		db 0
 		db 0
 		db 0	
-	IA_32_CODE:	;Kernel Code Descriptor
-		dw 0xffff	
-		dw 0x0000	
-		db 0x00		
-		db 0x9A		
-		db 0xCF
-		db 0x00 
-	IA_32_DATA:	;Kernel Data Descriptor
-		dw 0xffff
-		dw 0x0000
-		db 0x00
-		db 0x92
-		db 0xCF
-		db 0x00
 	IA_32e_CODE:	;Kernel Code Descriptor
 		dw 0xffff	
 		dw 0x0000	
@@ -143,6 +129,20 @@ GDT:
 		db 0x00
 		db 0x92
 		db 0xAF
+		db 0x00
+	IA_32_CODE:	;Kernel Code Descriptor
+		dw 0xffff	
+		dw 0x0000	
+		db 0x00		
+		db 0x9A		
+		db 0xCF
+		db 0x00 
+	IA_32_DATA:	;Kernel Data Descriptor
+		dw 0xffff
+		dw 0x0000
+		db 0x00
+		db 0x92
+		db 0xCF
 		db 0x00
 	VIDEO:	;Video Segment Descriptor
 		dw 0xffff

@@ -49,7 +49,7 @@ idt.o: ./kernel/idt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 gdt.o: ./kernel/gdt.c
-	$(CC32) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 ### 드라이버 빌드
 keyboard.o: ./drivers/keyboard.c

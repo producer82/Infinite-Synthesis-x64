@@ -83,7 +83,7 @@ void enableLongMode(){
 		"mov cr0, eax;"
 		
 		//CS = 0x18 (IA-32e CODE)
-		"jmp  0x18:0x200000"
+		"jmp 0x8:0x200000"
 	);
 }
 
