@@ -17,8 +17,7 @@ void initGDT(){
 	
 	__asm__ __volatile__("cli");
 	__asm__ __volatile__("mov rax, 0x150000");
-	__asm__ __volatile__("lgdt [rax]");
-	
+	__asm__ __volatile__("lgdt [rax]");	
 	
 	__asm__ __volatile__ (
 		"mov ax, 0x8;"
@@ -29,7 +28,7 @@ void initGDT(){
 		"mov ss, ax;"
 	);
 	
-	while(1);
+	__asm__ __volatile__("GDT_END:");
 	
 }
 

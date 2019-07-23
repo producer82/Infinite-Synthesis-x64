@@ -3,7 +3,7 @@
  											
  파일 명: init64.c
  설명: 64비트 커널의 메인
- 최초 작성: 2019-02-16 						
+ 최초 작성: 2019-03-03 						
 ********************************************/
 
 #include "stdkernel.h"
@@ -22,10 +22,8 @@ void Kernel64main(){
 	);
 	print("Load 64bit Kernel ................... [OK]", 5, 0, 0x0F);
 	
-	initGDT();
+	// initGDT();
 	print("GDT Setting ......................... [OK]", 6, 0, 0x0F);
-	
-	while(1);
 	
 	initInterrupt();
 	print("Interrupt Setting ................... [OK]", 7, 0, 0x0F);
@@ -37,6 +35,4 @@ void Kernel64main(){
 	print("Load File System .................... [OK]", 9, 0, 0x0F);
 	
 	enterShell();
-	
-	while(1);
 }

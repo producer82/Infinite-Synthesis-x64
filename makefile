@@ -16,7 +16,7 @@ INCLUDE64=./include
 NASM=nasm -f bin
 
 
-all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o stdkernel64.o idt.o gdt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
+all: bootloader.img loadkernel.img init32.o page.o stdkernel.o syscheck.o init64.o gdt.o stdkernel64.o idt.o keyboard.o shell.o sh_routine.o Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img Disk.img clean
 
 ###########################부트로더 빌드###########################
 bootloader.img: ./boot/bootloader.asm
@@ -48,6 +48,9 @@ stdkernel64.o: ./lib/stdkernel.c
 idt.o: ./kernel/idt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
+gdt.o: ./kernel/gdt.c
+	$(CC32) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
+	
 ### 드라이버 빌드
 keyboard.o: ./drivers/keyboard.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./drivers/$@
@@ -67,7 +70,7 @@ Kernel32.img: ./Kernel32N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel32N.img ./Kernel32.img
 
 Kernel64N.img: 
-	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel64.o ./kernel/idt.o ./kernel/shell/shell.o ./drivers/keyboard.o ./kernel/shell/sh_routine.o -o ./Kernel64N.img
+	ld -T ./elf_x86_64.x -nostdlib ./init/init64.o ./lib/stdkernel64.o ./kernel/idt.o ./kernel/gdt.o ./kernel/shell/shell.o ./drivers/keyboard.o ./kernel/shell/sh_routine.o -o ./Kernel64N.img
 	
 Kernel64.img: ./Kernel64N.img
 	objcopy -O binary -S -j .text -j .bss -j .data -j .rodata ./Kernel64N.img ./Kernel64.img
