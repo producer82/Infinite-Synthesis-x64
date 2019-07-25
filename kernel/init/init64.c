@@ -13,7 +13,7 @@
 
 void Kernel64main(){
 	__asm__ __volatile__ (
-		"mov ax, 0x20;"
+		"mov ax, 0x10;"
 		"mov ds, ax;"
 		"mov es, ax;"
 		"mov gs, ax;"
@@ -22,9 +22,9 @@ void Kernel64main(){
 	);
 	print("Load 64bit Kernel ................... [OK]", 5, 0, 0x0F);
 	
-	// initGDT();
+	initGDT();
 	print("GDT Setting ......................... [OK]", 6, 0, 0x0F);
-	
+
 	initInterrupt();
 	print("Interrupt Setting ................... [OK]", 7, 0, 0x0F);
 	

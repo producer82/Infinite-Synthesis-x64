@@ -26,7 +26,7 @@ loadkernel.img: ./boot/loadkernel.asm
 	$(NASM) ./boot/loadkernel.asm -o ./boot/loadkernel.img 
 	
 ###########################32비트 커널 빌드###########################	
-init32.o: ./init/init32.c
+init32.o: ./kernel/init/init32.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./init/$@
 
 page.o: ./kernel/x86/page.c
@@ -39,7 +39,7 @@ stdkernel.o: ./lib/x86/stdkernel.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./lib/x86/$@
 	
 ###########################64비트 커널 빌드###########################	
-init64.o: ./init/init64.c
+init64.o: ./kernel/init/init64.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./init/$@
 	
 stdkernel64.o: ./lib/stdkernel.c
@@ -49,10 +49,10 @@ idt.o: ./kernel/idt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 gdt.o: ./kernel/gdt.c
-	$(CC32) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 ### 드라이버 빌드
-keyboard.o: ./drivers/keyboard.c
+keyboard.o: ./kernel/drivers/keyboard.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./drivers/$@
 	
 ### 셸 빌드
