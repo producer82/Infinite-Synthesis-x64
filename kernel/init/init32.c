@@ -86,5 +86,5 @@ void enableLongMode(){
 		
 		"jmp 0x8:0x200000"
 	);
-}
 
+}

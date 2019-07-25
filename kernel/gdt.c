@@ -17,8 +17,7 @@ void initGDT(){
 	
 	__asm__ __volatile__("cli");
 	__asm__ __volatile__("mov rax, 0x150000");
-	__asm__ __volatile__("lgdt [rax]");
-	
+	__asm__ __volatile__("lgdt [rax]");	
 
 	__asm__ __volatile__("sti");
 }
@@ -31,4 +30,3 @@ void setGDTEntry(GDT *entry, unsigned int baseAddress, unsigned int limitAddress
 	entry->higherLimitAndFlags = ((limitAddress >> 16) & 0xF) | flags;
 	entry->higherBaseAddress = (baseAddress >> 24) & 0xFF;
 }
-
