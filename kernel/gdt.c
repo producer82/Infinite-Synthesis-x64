@@ -29,4 +29,3 @@ void setGDTEntry(GDT *entry, unsigned int baseAddress, unsigned int limitAddress
 	entry->higherLimitAndFlags = ((limitAddress >> 16) & 0xF) | flags;
 	entry->higherBaseAddress = (baseAddress >> 24) & 0xFF;
 }
-
