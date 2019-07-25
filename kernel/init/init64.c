@@ -2,7 +2,7 @@
  			Infinite Synthesis x64			
  											
  파일 명: init64.c
- 설명: 64비트 커널의 메인
+ 설명: 64비트 커널의 메인	
  최초 작성: 2019-03-03 						
 ********************************************/
 
@@ -24,6 +24,8 @@ void Kernel64main(){
 	
 	initGDT();
 	print("GDT Setting ......................... [OK]", 6, 0, 0x0F);
+	
+
 
 	initInterrupt();
 	print("Interrupt Setting ................... [OK]", 7, 0, 0x0F);
@@ -35,4 +37,5 @@ void Kernel64main(){
 	print("Load File System .................... [OK]", 9, 0, 0x0F);
 	
 	enterShell();
+
 }

@@ -26,6 +26,7 @@ loadkernel.img: ./boot/loadkernel.asm
 	$(NASM) ./boot/loadkernel.asm -o ./boot/loadkernel.img 
 	
 ###########################32비트 커널 빌드###########################	
+
 init32.o: ./kernel/init/init32.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./init/$@
 
@@ -39,6 +40,7 @@ stdkernel.o: ./lib/x86/stdkernel.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./lib/x86/$@
 	
 ###########################64비트 커널 빌드###########################	
+
 init64.o: ./kernel/init/init64.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./init/$@
 	
@@ -52,6 +54,7 @@ gdt.o: ./kernel/gdt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./kernel/$@
 	
 ### 드라이버 빌드
+
 keyboard.o: ./kernel/drivers/keyboard.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./drivers/$@
 	

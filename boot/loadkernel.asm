@@ -2,6 +2,7 @@
 [BITS 32]
 
 PROTECTED:
+	
 	mov ax, 0x20
 	mov gs, ax
 	mov ss, ax
@@ -64,6 +65,7 @@ PICINIT:
 	
 LOADKERNEL:
 	pop es
+	
 	jmp dword 0x18:0x10200
 
 message: db 'Infinite Synthesis Kernel Start', 0

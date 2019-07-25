@@ -26,16 +26,20 @@ void initInterrupt(){
 	
 	//무시되는 인터럽트를 맵핑함
 	for(int i = 0; i < 256; i++){
+		
 		setIDTEntry(&(intTableEntry[i]), isrDummy, 0x8, 0, IDT_PRESENT | IDT_INT_GATE);
 	}
 
 	//Divide by Zero 인터럽트
+	
 	setIDTEntry(&(intTableEntry[0]), isrDivideByZero, 0x8, 0, IDT_PRESENT | IDT_INT_GATE);
 	
 	//타이머 인터럽트
+	
 	setIDTEntry(&(intTableEntry[32]), isrTimer, 0x8, 0, IDT_PRESENT | IDT_INT_GATE);
 
 	//키보드 인터럽트
+	
 	setIDTEntry(&(intTableEntry[33]), isrKeyboard, 0x8, 0, IDT_PRESENT | IDT_INT_GATE);
 	
 	// 인터럽트 활성화

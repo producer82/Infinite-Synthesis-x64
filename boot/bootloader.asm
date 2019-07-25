@@ -99,7 +99,7 @@ entryToProtected:
 	jmp $+2			;파이프라인 유지를 위한 공백
 	nop
 	nop
-	
+
 	jmp dword 0x18:0x10000
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;GDT;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -121,27 +121,34 @@ GDT:
 		dw 0x0000	
 		db 0x00		
 		db 0x9A		
+		
 		db 0xAF
 		db 0x00 
+	
 	IA_32e_DATA:	;Kernel Data Descriptor
 		dw 0xffff
 		dw 0x0000
 		db 0x00
 		db 0x92
+		
 		db 0xAF
 		db 0x00
+	
 	IA_32_CODE:	;Kernel Code Descriptor
 		dw 0xffff	
 		dw 0x0000	
 		db 0x00		
 		db 0x9A		
+		
 		db 0xCF
 		db 0x00 
+	
 	IA_32_DATA:	;Kernel Data Descriptor
 		dw 0xffff
 		dw 0x0000
 		db 0x00
 		db 0x92
+		
 		db 0xCF
 		db 0x00
 	VIDEO:	;Video Segment Descriptor
