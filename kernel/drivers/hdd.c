@@ -1,7 +1,9 @@
 #include "drivers.h"
 
 void readSector(){
-	
+	__asm__ __volatile__(
+		"outb 0x1F6, 0xE0;"
+	)
 }
 
 void writeSector(){
