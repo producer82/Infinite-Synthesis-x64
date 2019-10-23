@@ -13,6 +13,7 @@
 char key[1] = {0};				//타이머 인터럽트 확인용 변수
 extern char inputStr[200];		//입력 문자열 저장 배열, keyboard.c
 extern unsigned char shellLine;	//출력할 줄 계산용 변수, shell.c
+extern unsigned char charCount;
 
 void initInterrupt(){
 	IDTR *idtr;
@@ -89,6 +90,7 @@ void isrKeyboard(){
 	
 	clearLine(shellLine, 10);
 	print(inputStr, shellLine, 10, 0x0F);
+	charCount++;
 	
 	restoreStatus;
 }

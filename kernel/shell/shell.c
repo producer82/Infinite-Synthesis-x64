@@ -11,6 +11,8 @@
 #include "stdkernel.h"
 
 unsigned char shellLine = 0;
+unsigned char charCount = 10;
+int i;
 extern unsigned char inputStr[160];
 extern unsigned char keyboardIndex;
 extern unsigned char data;
@@ -24,15 +26,22 @@ void enterShell(){
 	// 키보드로 엔터가 입력되는것을 인터럽트를 통해 감지하면
 	// 아래 루틴을 수행하여 입력을 처리한다.
 	while(1){
-		if(data == 0x0D){
+		
+		if(data == 0x0D){	
+			// 입력한 명령어가 한 줄을 넘어갈 시 스크롤함
+			for (i = 0; i < charCount / 80; i++){
+				processScroll();
+			}
 			//명령어를 읽음
-			interpreteCommand();
+			interpreteCommand();	
+			//셸 출력
 			processScroll();
 			print("Synthesis>", shellLine, 0, 0x09);
-			//버퍼에 받았던 ENTER키를 지움
+			//버퍼, 인덱스, 문자 카운트 초기화
 			data = 0;
-			//입력받을 배열의 위치를 처음으로 돌림
 			keyboardIndex = 0;
+			charCount = 10;
+			
 			//이전에 받았던 명령을 지움
 			for(int i = 0; i < 160; i++){
 				inputStr[i] = 0;
@@ -58,7 +67,7 @@ void interpreteCommand(){
 }
 
 void processScroll(){
-	if (shellLine < 24){
+	if (shellLine <= 23){
 		shellLine++;
 	}
 	if (shellLine > 23){

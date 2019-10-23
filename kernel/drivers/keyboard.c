@@ -9,7 +9,9 @@
 /****TODO****/
 // 대문자 입력
 // 특수문자 입력
+
 // LED 제어
+
 // 활성화시 포트 검사
 /************/
 #include "drivers.h"
@@ -37,6 +39,8 @@ void getInput(){
 		"mov %0, al;":"=m"(data)
 	);
 	
+	// 쉬프트 플래그 설정
+	
 	// 스캔코드를 아스키 코드로 변환
 	data = smallAsciiSet(data);
 	
@@ -49,6 +53,10 @@ void getInput(){
 	else if (data != 0xFF && data != 0x08 && data != 0x0D){
 		inputStr[keyboardIndex++] = data;
 	}
+}
+
+void setLED(){
+	;
 }
 
 // 스캔코드 -> 소문자 아스키 변환 테이블
