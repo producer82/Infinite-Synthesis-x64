@@ -7,32 +7,64 @@
 ********************************************/
 
 #include "stdkernel.h"
+#include <stdarg.h>
 
 // 문자열 출력
-void print(char* str, int line, int column, unsigned char color) {
-	char *video = (char*)(0xB8000 + 160 * line + (column * 2));	
+void print(char* str, int line, int column, unsigned char color,...) {
+	int i = 0;
 	
-	for (int i = 0; str[i] != 0; i++)
+	char *video = (char*)(0xB8000 + 160 * line + (column * 2));	
+	va_list ap;
+	
+	va_start(ap, color);
+	
+	for (i = 0; str[i] != 0; i++)
 	{		
+		if(str[i] == '%'){
+			i++;
+			switch(str[i]){
+				case('d'):
+					print_int(va_arg(ap, int), video, color);
+					break;
+				default:
+					break;
+			}
+			i++;
+		}
 		*video++ = str[i];
 		*video++ = color;
 	}
+	
+	va_end(ap);
+}
+
+void print_int(int arg, char *video, unsigned char color){
+	int i = 0;
+	char str[10] = itoa(arg);
+	
+	for (i = 0; str[i] != 0; i++){
+		*video++ = str[i];
+		*video++ = color;
+	}
+	
 }
 
 // 화면 초기화
 void clear(){
+	int i = 0;
 	char *video = (char*)0xB8000;
 	
-	for (int i = 0; i < 80 * 25 * 2; i++){
+	for (i = 0; i < 80 * 25 * 2; i++){
 		*video++ = 0;
 	}
 }
 
 // 줄 단위의 초기화
 void clearLine(unsigned char line, unsigned char column){
+	int i = 0;
 	char *video = (char*)(0xB8000 + 160 * line + (column * 2));
 	
-	for(int i=0; i<160 - column * 2; i++){
+	for (i = 0; i < 160 - column * 2; i++){
 		*video++ = 0;
 	}
 }
@@ -46,4 +78,8 @@ char strcmp(char *str1, char *str2){
 		i++;
 	}
 	return 1;
+}
+
+char *itoa(int arg){
+	
 }
