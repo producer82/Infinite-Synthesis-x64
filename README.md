@@ -4,7 +4,7 @@ Compile with gcc, nasm
 ## OS Requirement
 * Architecture : x86_64
 * Maximum support memory : 64GB
-* Memory require : 64MB 이상 요구
+* Memory require : Over 64MB
 * CPU : any processor that support x86_64
 
 # Feature
