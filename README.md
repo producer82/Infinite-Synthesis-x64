@@ -1,16 +1,14 @@
-## Infinite-Synthesis-x64
-Compile with gcc, nasm
+## Infinite-Synthesis
+Operating System from scratch for some people who want to play with the os.
 
-## OS Requirement
+## Current OS Requirement
 * Architecture : x86_64
 * Maximum support memory : 64GB
 * Memory require : Over 64MB
 * CPU : any processor that support x86_64
 
-# Feature
-* 기초적인 하드디스크 드라이버
-* 파일 시스템
-* 태스크 구현
-* 라운드 로빈 스케줄러 구현
-* 동적할당 구현
-* 키보드 드라이버, 셸, 인터럽트 업그레이드
+# Current Goal
+* Basic HDD Driver
+* File System
+* Add some task system
+* Upgrade the keyboard driver
