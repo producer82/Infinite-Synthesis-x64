@@ -8,8 +8,8 @@
 #			탭을 스페이스바로 입력하지 말 것.	#
 #############################################
 
-CC32=gcc -m64
-CC64=gcc -m32
+CC32=gcc -m32
+CC64=gcc -m64
 CFLAGS=-c -masm=intel -ffreestanding -Wall
 INCLUDE64=../include
 INCLUDE32=../include/x86

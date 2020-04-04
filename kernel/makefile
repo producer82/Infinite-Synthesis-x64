@@ -11,18 +11,18 @@
 CC32=gcc -m32
 CC64=gcc -m64
 OCP=objcopy
-LD32=ld -T ./elf_i386.x -nostdlib
-LD64=ld -T ./elf_x86_64.x -nostdlib
+LD32=ld -T ../elf_i386.x -nostdlib
+LD64=ld -T ../elf_x86_64.x -nostdlib
 CFLAGS=-c -masm=intel -ffreestanding -Wall
 OFLAGS=-O binary -S -j .text -j .bss -j .data -j .rodata
 INCLUDE32=../include/x86
 INCLUDE64=../include
-OBJ32=kernel32 ../lib/x86/stdkernel.o
-OBJ64=kernel64 ../lib/stdkernel64.o ./drivers/hdd.o ./drivers/keyboard.o ./shell/shell.o ./shell/sh_routine.o
+OBJ32=./init/init32.o ./x86/page.o ./x86/syscheck.o ../lib/x86/stdkernel.o
+OBJ64=./init/init64.o gdt.o idt.o pit.o ../lib/stdkernel64.o ./drivers/hdd.o ./drivers/keyboard.o ./shell/shell.o ./shell/sh_routine.o
 
-all: kernel32 kernel64 drivers shell
+all: kernel32 kernel64 drivers shell Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img
 kernel32: init32.o page.o syscheck.o
-kernel64: init64.o gdt.o idt.o pit.o 
+kernel64: init64.o gdt.o idt.o pit.o
 
 ###################32비트 커널 빌드###################
 init32.o: ./init/init32.c
@@ -58,15 +58,15 @@ Kernel32N.img: $(OBJ32)
 	$(LD32) $(OBJ32) -o ../$@
 	
 Kernel32.img: ../Kernel32N.img
-	$(OCP) $(OFLAGS) ../$^ ../$@
+	$(OCP) $(OFLAGS) $^ $@
 
 Kernel64N.img: $(OBJ64)
 	$(LD64) $(OBJ64) -o ../$@
 	
 Kernel64.img: ../Kernel64N.img
-	$(OCP) $(OFLAGS) ../$^ ../$@
+	$(OCP) $(OFLAGS) $^ $@
 	
-.PHONY: clean
+.PHONY: clean drivers shell
 
 clean:
 	rm -f ./*.o

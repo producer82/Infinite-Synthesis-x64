@@ -24,7 +24,7 @@ void print(char* str, int line, int column, unsigned char color,...) {
 			i++;
 			switch(str[i]){
 				case('d'):
-					print_int(va_arg(ap, int), video, color);
+					// print_int(va_arg(ap, int), video, color);
 					break;
 				default:
 					break;
@@ -38,16 +38,15 @@ void print(char* str, int line, int column, unsigned char color,...) {
 	va_end(ap);
 }
 
-void print_int(int arg, char *video, unsigned char color){
-	int i = 0;
-	char str[10] = itoa(arg);
+// void print_int(int arg, char *video, unsigned char color){
+	// int i = 0;
+	// char str[10] = itoa(arg);
 	
-	for (i = 0; str[i] != 0; i++){
-		*video++ = str[i];
-		*video++ = color;
-	}
-	
-}
+	// for (i = 0; str[i] != 0; i++){
+		// *video++ = str[i];
+		// *video++ = color;
+	// }
+// }
 
 // 화면 초기화
 void clear(){
@@ -78,8 +77,4 @@ char strcmp(char *str1, char *str2){
 		i++;
 	}
 	return 1;
-}
-
-char *itoa(int arg){
-	
 }
