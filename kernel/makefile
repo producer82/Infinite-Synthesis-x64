@@ -2,10 +2,10 @@
 #			Infinite Synthesis x64	  		#
 #											#
 # 파일 명: ./kernel/makefile					#
-# 설명: Infinite Synthesis 빌드 용 makefile	#
+# 설명: Infinite Synthesis 빌드 용 makefile		#
 # 최초 작성: 2020-04-03						#
 #############################################
-#			탭을 스페이스바로 입력하지 말 것.		#
+#			탭을 스페이스바로 입력하지 말 것.			#
 #############################################
 
 CC32=gcc -m32
@@ -17,12 +17,12 @@ CFLAGS=-c -masm=intel -ffreestanding -Wall
 OFLAGS=-O binary -S -j .text -j .bss -j .data -j .rodata
 INCLUDE32=../include/x86
 INCLUDE64=../include
-OBJ32=./init/init32.o ./x86/page.o ./x86/syscheck.o ../lib/x86/stdkernel.o
-OBJ64=./init/init64.o ../lib/stdkernel64.o ./idt.o ./gdt.o ./pit.o ./shell/shell.o ./drivers/keyboard.o ./shell/sh_routine.o
+OBJ32=kernel32 ../lib/x86/stdkernel.o
+OBJ64=kernel64 ../lib/stdkernel64.o ./drivers/hdd.o ./drivers/keyboard.o ./shell/shell.o ./shell/sh_routine.o
 
-all: kernel32 kernel64 drivers
+all: kernel32 kernel64 drivers shell
 kernel32: init32.o page.o syscheck.o
-kernel64: gdt.o idt.o pit.o
+kernel64: init64.o gdt.o idt.o pit.o 
 
 ###################32비트 커널 빌드###################
 init32.o: ./init/init32.c
@@ -35,6 +35,9 @@ syscheck.o: ./x86/syscheck.c
 	$(CC32) $(CFLAGS) -I$(INCLUDE32) $^ -o ./x86/$@
 	
 ###################64비트 커널 빌드###################
+init64.o: ./init/init64.c
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o $@
+
 gdt.o: gdt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o $@
 	
