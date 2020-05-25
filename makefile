@@ -30,10 +30,10 @@ kernel: ./kernel/makefile
 	cd kernel; $(MAKE)
 	
 ###########################운영체제 이미지 빌드###########################	
-Disk.img: ./boot/boot.bin Kernel32.img Kernel64.img
-	cat ./boot/boot.bin Kernel32.img Kernel64.img > Disk.img
+Disk.img: ./boot/boot.bin ./kernel/Kernel32.img ./kernel/Kernel64.img
+	cat ./boot/boot.bin ./kernel/Kernel32.img ./kernel/Kernel64.img > Disk.img
 	
-.PHONY: kernel clean
+.PHONY: clean
 	
 clean:
 	find ./ -name '*.o' -exec rm {} \;

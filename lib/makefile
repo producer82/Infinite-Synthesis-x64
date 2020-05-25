@@ -21,8 +21,3 @@ all: ./x86/stdkernel.o stdkernel.o
 	
 stdkernel.o: stdkernel.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o $@
-	
-.PHONY: clean
-
-clean:
-	rm -f *.o

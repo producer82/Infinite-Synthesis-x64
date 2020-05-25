@@ -19,8 +19,3 @@ shell.o: shell.c
 	
 sh_routine.o: sh_routine.c
 	$(CC) $(CFLAGS) -I$(INCLUDE) $^ -o $@
-	
-.PHONY: clean
-
-clean:
-	rm -f *.img

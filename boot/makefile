@@ -20,7 +20,7 @@ loadkernel.img: loadkernel.asm
 boot.bin: bootloader.img loadkernel.img
 	cat $^ > $@
 	
-.PHONY: clean
+.PHONY: clean 
 
 clean:
 	rm -f *.img

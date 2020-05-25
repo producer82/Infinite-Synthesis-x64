@@ -19,8 +19,3 @@ hdd.o: hdd.c
 	
 keyboard.o: keyboard.c
 	$(CC) $(CFLAGS) -I$(INCLUDE) $^ -o $@
-	
-.PHONY: clean
-
-clean:
-	rm -f *.img

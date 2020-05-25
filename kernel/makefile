@@ -18,7 +18,7 @@ OFLAGS=-O binary -S -j .text -j .bss -j .data -j .rodata
 INCLUDE32=../include/x86
 INCLUDE64=../include
 OBJ32=./init/init32.o ./x86/page.o ./x86/syscheck.o ../lib/x86/stdkernel.o
-OBJ64=./init/init64.o gdt.o idt.o pit.o ../lib/stdkernel64.o ./drivers/hdd.o ./drivers/keyboard.o ./shell/shell.o ./shell/sh_routine.o
+OBJ64=./init/init64.o gdt.o idt.o pit.o ../lib/stdkernel.o ./drivers/hdd.o ./drivers/keyboard.o ./shell/shell.o ./shell/sh_routine.o
 
 all: kernel32 kernel64 drivers shell Kernel32N.img Kernel32.img Kernel64N.img Kernel64.img
 kernel32: init32.o page.o syscheck.o
@@ -36,7 +36,7 @@ syscheck.o: ./x86/syscheck.c
 	
 ###################64비트 커널 빌드###################
 init64.o: ./init/init64.c
-	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o $@
+	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o ./init/$@
 
 gdt.o: gdt.c
 	$(CC64) $(CFLAGS) -I$(INCLUDE64) $^ -o $@
@@ -55,18 +55,20 @@ shell: ./shell/makefile
 	
 ######################커널 이미지 빌드####################
 Kernel32N.img: $(OBJ32)
-	$(LD32) $(OBJ32) -o ../$@
+	$(LD32) $(OBJ32) -o $@
 	
-Kernel32.img: ../Kernel32N.img
+Kernel32.img: Kernel32N.img
 	$(OCP) $(OFLAGS) $^ $@
 
 Kernel64N.img: $(OBJ64)
-	$(LD64) $(OBJ64) -o ../$@
+	$(LD64) $(OBJ64) -o $@
 	
-Kernel64.img: ../Kernel64N.img
+Kernel64.img: Kernel64N.img
 	$(OCP) $(OFLAGS) $^ $@
+	
+Kernel.img: Kernel32.img Kernel64.img
 	
 .PHONY: clean drivers shell
 
 clean:
-	rm -f ./*.o
+	rm -rf *.img
